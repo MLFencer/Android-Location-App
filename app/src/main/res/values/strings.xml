@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TBD</string>
+    <string name="loginText">Login</string>
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+    <string name="rememberCheckBoxText">Remember Login</string>
+    <string name="loginButtonText">Login</string>
 </resources>
