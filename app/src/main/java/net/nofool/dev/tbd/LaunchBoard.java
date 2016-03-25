@@ -1,5 +1,8 @@
 package net.nofool.dev.tbd;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -9,9 +12,52 @@ import android.os.Bundle;
 
 public class LaunchBoard extends AppCompatActivity {
 
+    String email=null;
+    String pWord=null;
+    int save=0;
+    SQLiteDatabase parentLoginDB;
+    Cursor c = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_board);
+
+        parentLoginDB = openOrCreateDatabase("ParentLogin", MODE_PRIVATE, null);
+
+        if (!Check()){
+            Intent i = new Intent(getApplicationContext(),Registration.class);
+            startActivity(i);
+        } else {
+            c=parentLoginDB.rawQuery("SELECT * from user", null);
+            email=c.getString(1);
+            pWord=c.getString(2);
+            save=c.getInt(3);
+        }
+
+
     }
+
+    private Boolean Check(){
+        Cursor c = null;
+        boolean exist;
+// get cursor on it
+        try
+        {
+            c = parentLoginDB.query("email", null,null, null, null, null, null);
+            exist = true;
+        }
+        catch (Exception e) {
+    // fail
+            exist=false;
+        }
+
+        if (exist = false){
+            parentLoginDB.execSQL("CREATE TABLE login(email VARCHAR, password VARCHAR, remember INT);");
+            return exist;
+        } else {
+            return exist;
+        }
+    }
+
 }
