@@ -8,4 +8,7 @@
     <string name="signupText">Sign Up</string>
     <string name="orText">Or</string>
     <string name="passwordCheckHint">Confirm Password</string>
+    <string name="createNewButton">Create New Account</string>
+    <string name="title_activity_center">Center</string>
+    <string name="action_settings">Settings</string>
 </resources>

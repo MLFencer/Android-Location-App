@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.nofool.dev.tbd" >
+    package="net.nofool.dev.tbd">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".LaunchBoard" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".LaunchBoard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,8 +20,11 @@
         </activity>
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
-        <activity android:name=".ChoiceActivity" >
-        </activity>
+        <activity android:name=".ChoiceActivity"></activity>
+        <activity
+            android:name=".Center"
+            android:label="@string/title_activity_center"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

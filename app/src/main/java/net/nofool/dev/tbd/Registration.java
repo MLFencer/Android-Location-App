@@ -48,9 +48,14 @@ public class Registration extends AppCompatActivity {
     }
 
     private View.OnClickListener signupClick = new View.OnClickListener(){
+        private String e;
+        private String p;
         @Override
         public void onClick(View v) {
             if (passCheck()) {
+                e = emailField.toString();
+                p = passwordField.toString();
+                //Send to database
                 Intent i = new Intent(getApplicationContext(), Login.class);
                 startActivity(i);
             } else {
