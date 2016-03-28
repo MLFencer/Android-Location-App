@@ -12,11 +12,11 @@ import android.os.Bundle;
 
 public class LaunchBoard extends AppCompatActivity {
 
-    String email=null;
-    String pWord=null;
-    int save=0;
-    SQLiteDatabase parentLoginDB;
-    Cursor c = null;
+    private String email=null;
+    private String pWord=null;
+    private int save=0;
+    private SQLiteDatabase parentLoginDB;
+    private Cursor c = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class LaunchBoard extends AppCompatActivity {
         parentLoginDB = openOrCreateDatabase("ParentLogin", MODE_PRIVATE, null);
 
         if (!Check()){
-            Intent i = new Intent(getApplicationContext(),Registration.class);
+            Intent i = new Intent(getApplicationContext(),ChoiceActivity.class);
             startActivity(i);
         } else {
             c=parentLoginDB.rawQuery("SELECT * from user", null);
