@@ -21,10 +21,6 @@
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
         <activity android:name=".ChoiceActivity"></activity>
-        <activity
-            android:name=".Center"
-            android:label="@string/title_activity_center"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
