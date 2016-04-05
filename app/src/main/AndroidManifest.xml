@@ -21,10 +21,7 @@
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
         <activity android:name=".ChoiceActivity" />
-        <activity
-            android:name=".Devices"
-            android:label="@string/title_activity_devices"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Devices"></activity>
     </application>
 
 </manifest>
