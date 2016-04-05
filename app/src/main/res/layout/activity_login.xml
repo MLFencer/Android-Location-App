@@ -49,11 +49,11 @@
         android:layout_columnSpan="2"
         android:gravity="center_horizontal" />
 
-    <CheckBox
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rememberCheckBoxText"
-        android:id="@+id/rememberCheckBox"
+        android:text="@string/createNewButton"
+        android:id="@+id/registerButton"
         android:layout_row="3"
         android:layout_column="0"
         android:layout_gravity="center_horizontal" />

@@ -13,7 +13,6 @@ public class Login extends AppCompatActivity {
     private Button loginB;
     private EditText emailET;
     private EditText passwordET;
-    private CheckBox rememberBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,6 @@ public class Login extends AppCompatActivity {
         loginB = (Button)findViewById(R.id.loginButton);
         emailET = (EditText)findViewById(R.id.emailEditText);
         passwordET = (EditText)findViewById(R.id.passwordEditText);
-        rememberBox = (CheckBox)findViewById(R.id.rememberCheckBox);
 
         loginB.setOnClickListener(loginClick);
 
@@ -36,9 +34,7 @@ public class Login extends AppCompatActivity {
         public void onClick(View v) {
             email = emailET.getText().toString();
             password = passwordET.getText().toString();
-            if (rememberBox.isChecked()){
 
-            }
         }
     };
 
