@@ -1,5 +1,6 @@
 package net.nofool.dev.tbd;
-
+//Methods for use in multiple classes
 public class PublicMethods {
-    //Methods for use in multiple classes
+
+
 }
