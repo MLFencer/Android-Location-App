@@ -131,7 +131,7 @@ public class Registration extends AppCompatActivity {
         });
     }
     private void Register2(String e, String p){
-        final String urlPost = "http://dev.nofool.net/db_registar.php";
+        final String urlPost = "http://dev.nofool.net/app/registerNewUser.php";
         final RequestBody bodyPost = new FormBody.Builder().add("email", e).add("password", p).build();
         final OkHttpClient client2 = new OkHttpClient();
         Request request2 = new Request.Builder().url(urlPost).post(bodyPost).build();
@@ -146,8 +146,8 @@ public class Registration extends AppCompatActivity {
                     Log.v(TAG, jsonData2);
                     if (response.isSuccessful()){
                         JSONObject jsonO = new JSONObject(jsonData2);
-                        int success = jsonO.getInt("success");
-                        if (success == 1) {
+                        String success = jsonO.getString("message");
+                        if (success.equalsIgnoreCase("success")) {
                             Intent i = new Intent(getApplicationContext(), Login.class);
                             startActivity(i);
                         }
