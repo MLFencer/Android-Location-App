@@ -13,8 +13,7 @@ public class NotificationsDialogFragment  extends DialogFragment{
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        savedInstanceState = getArguments();
-        alertType = savedInstanceState.getString("alert_type");
+        alertType = getArguments().getString("error_type");
         context= getActivity();
         builder= new AlertDialog.Builder(context);
 

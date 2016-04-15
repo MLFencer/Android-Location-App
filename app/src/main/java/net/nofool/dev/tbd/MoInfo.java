@@ -1,0 +1,13 @@
+package net.nofool.dev.tbd;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class MoInfo extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mo_info);
+    }
+}

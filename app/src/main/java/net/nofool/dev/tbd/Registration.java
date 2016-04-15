@@ -81,7 +81,10 @@ public class Registration extends AppCompatActivity {
         public void onClick(View v) {
             e = emailField.getText().toString();
             p = passwordField.getText().toString();
-            Register2(e, p);
+            Register(e, p);
+            emailField.setText("");
+            passwordCheckField.setText("");
+            passwordField.setText("");
         }
     };
     private boolean passCheck(String p1, String p2){
@@ -91,10 +94,10 @@ public class Registration extends AppCompatActivity {
             return false;
         }
     }
-    private void Register(String email, String pass) {
+    private void Register(String email, String password) {
         final String e = email;
-        final String p = pass;
-        final String urlRequest = "http://dev.nofool.net/db_getpassword.php";
+        final String p = password;
+        final String urlRequest = "http://dev.nofool.net/app/getPassword.php";
         final RequestBody bodyRequest = new FormBody.Builder()
                 .add("email", email)
                 .build();
@@ -113,8 +116,8 @@ public class Registration extends AppCompatActivity {
                     Log.v(TAG, jsonData);
                     if (response.isSuccessful()) {
                         JSONObject jsonObject = new JSONObject(jsonData);
-                        int x =jsonObject.getInt("success");
-                        if (x==1){
+                        String x =jsonObject.getString("message");
+                        if (x.equalsIgnoreCase("Success")){
                             alertUser("duplicate");
                         }
                         else {
@@ -164,6 +167,9 @@ public class Registration extends AppCompatActivity {
 
     private void alertUser(String s){
         NotificationsDialogFragment alert = new NotificationsDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("error_type",s);
+        alert.setArguments(args);
         alert.show(getFragmentManager(), s);
     }
 }
