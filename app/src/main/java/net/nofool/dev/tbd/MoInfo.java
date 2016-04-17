@@ -3,7 +3,6 @@ package net.nofool.dev.tbd;
 import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -12,11 +11,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
@@ -62,11 +59,7 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         LatLng location = new LatLng(x,y);
         mmap.addMarker(new MarkerOptions().position(location).title(n));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
-            mmap.setMyLocationEnabled(true);
-        } else {
-            Toast.makeText(MoInfo.this, "To see yourself on the map allow this app access to location data!", Toast.LENGTH_SHORT).show();
-        }
+
 
 
     }

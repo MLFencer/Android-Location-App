@@ -28,6 +28,8 @@ public class DeviceListFrag extends ListFragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        getDevices(Devices.getId());
     }
 
     private void getDevices(int id){
@@ -49,11 +51,12 @@ public class DeviceListFrag extends ListFragment{
                     if (response.isSuccessful()){
                         JSONObject jsonObject = new JSONObject(jsonData);
                         JSONArray dArray = jsonObject.getJSONArray("devices");
-                        ArrayList<Device> deviceList = null;
+                        ArrayList<Device> deviceList = new ArrayList<Device>();
                         for (int i = 0; i<dArray.length(); i++){
                             JSONObject d = dArray.getJSONObject(i);
                             String name = d.getString("name");
                             String key = d.getString("key");
+                            Log.v(TAG, i+" "+name+" "+key);
                             deviceList.add(new Device(name, key));
                         }
                         SetFrag(deviceList);
@@ -68,12 +71,18 @@ public class DeviceListFrag extends ListFragment{
     }
 
     private void SetFrag(ArrayList<Device> dList){
-        String[] names =null;
+        String[] names = new String[dList.size()];
         for (int i = 0; i<dList.size(); i++){
             Device d = dList.get(i);
             names[i]=d.getName();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, names);
-        setListAdapter(adapter);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, names);
+        getActivity().runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                setListAdapter(adapter);
+            }
+        });
+
     }
 }
