@@ -3,10 +3,13 @@ package net.nofool.dev.tbd;
 //Data for all connected devices
 public class Device {
     private String name, id, gcmID, location;
-    private String[] apps = new String[5];
-    private String[] times = new String[5];
+    private String[] apps = new String[3];
+    private String[] times = new String[3];
 
-    public Device(){}
+    public Device(String name, String gcmID){
+        this.name = name;
+        this.gcmID = gcmID;
+    }
 
     public String getName(){
         return name;
