@@ -88,7 +88,7 @@ public class Registration extends AppCompatActivity {
         }
     };
     private boolean passCheck(String p1, String p2){
-        if (p1.equals(p2)){
+        if (p1.equalsIgnoreCase(p2)){
             return true;
         }else{
             return false;
