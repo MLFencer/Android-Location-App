@@ -2,9 +2,12 @@ package net.nofool.dev.tbd;
 
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +27,7 @@ import okhttp3.Response;
 public class DeviceListFrag extends ListFragment{
 
     private String TAG = DeviceListFrag.class.getSimpleName();
-
+    ArrayList<Device> deviceArrayList = new ArrayList<Device>();
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -71,6 +74,7 @@ public class DeviceListFrag extends ListFragment{
     }
 
     private void SetFrag(ArrayList<Device> dList){
+        deviceArrayList = dList;
         String[] names = new String[dList.size()];
         for (int i = 0; i<dList.size(); i++){
             Device d = dList.get(i);
@@ -84,5 +88,15 @@ public class DeviceListFrag extends ListFragment{
             }
         });
 
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Device device = deviceArrayList.get(position);
+        Intent i = new Intent(getActivity(),MoInfo.class);
+        i.putExtra("name",device.getName());
+        i.putExtra("google",device.getGcmID());
+        startActivity(i);
     }
 }

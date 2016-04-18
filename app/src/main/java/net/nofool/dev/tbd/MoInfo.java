@@ -1,13 +1,9 @@
 package net.nofool.dev.tbd;
 
-import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,10 +16,9 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap mmap;
     private TextView dName, app1, app2, app3;
-    private Switch track;
     private ImageButton refresh;
     private double x,y;
-    private String n;
+    private String n, goog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +29,12 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         app1 = (TextView)findViewById(R.id.app1TV);
         app2 = (TextView)findViewById(R.id.app2TV);
         app3 = (TextView)findViewById(R.id.app3TV);
-        track = (Switch)findViewById(R.id.switch1);
         refresh = (ImageButton)findViewById(R.id.imageButton);
 
-       /* initMap();
+        goog = getIntent().getStringExtra("google");
+        n = getIntent().getStringExtra("name");
 
-        MarkerOptions mark = new MarkerOptions().position(new LatLng(x,y)).title(n);
-        mmap.addMarker(mark);
-        mmap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(x,y)));*/
-
-
-
-     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
     }
@@ -55,7 +44,6 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         mmap = googleMap;
         x=34.526147;
         y=-83.984395;
-        n="name";
         LatLng location = new LatLng(x,y);
         mmap.addMarker(new MarkerOptions().position(location).title(n));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(location));
@@ -63,18 +51,4 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
 
 
     }
-    /*
-    private void initMap(){
-        if (mmap == null){
-            mmap = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-            if (mmap==null){
-
-            }
-        }
-    }
-@Override
-    protected void onResume(){
-    super.onResume();
-    initMap();
-}*/
 }

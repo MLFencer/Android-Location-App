@@ -34,11 +34,15 @@ public class NotificationsDialogFragment  extends DialogFragment{
             builder.setTitle("Error");
             builder.setMessage("The entered password is incorrect.");
             builder.setPositiveButton("Ok",null);
-        } else if (alertType.equalsIgnoreCase("sure")){
+        } else if (alertType.equalsIgnoreCase("Other")){
             builder.setTitle("Confirm");
-            builder.setMessage("Are You Sure?");
-            builder.setNegativeButton("No", null);
-            builder.setPositiveButton("Yes",null);
+            builder.setMessage("This Device is already registered under another account");
+            builder.setNegativeButton("Leave It", null);
+            builder.setPositiveButton("Change Account",null);
+        }else if (alertType.equalsIgnoreCase("first")) {
+            builder.setTitle("Confirm");
+            builder.setMessage("You must login once to activate this device!");
+            builder.setNeutralButton("Ok", null);
         }
 
         AlertDialog dialog = builder.create();

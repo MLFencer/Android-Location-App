@@ -1,0 +1,75 @@
+{
+  "project_info": {
+    "project_id": "term-porject-spring-2016",
+    "project_number": "195528134000",
+    "name": "Term Porject Spring 2016"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195528134000:android:50991960d17f0f3c",
+        "client_id": "android:dev.nofool.net.tbd",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "dev.nofool.net.tbd",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195528134000:android:a31c71681d737b5d",
+        "client_id": "android:net.nofool.dev.tbd",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "net.nofool.dev.tbd",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

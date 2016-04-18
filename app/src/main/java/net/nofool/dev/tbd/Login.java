@@ -1,6 +1,11 @@
 package net.nofool.dev.tbd;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,12 +39,24 @@ public class Login extends AppCompatActivity {
     private Button newB;
 
     private String TAG = Registration.class.getSimpleName();
-
+    final String PREFS="dev.nofool.net.tbd";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        if (getIntent().getBooleanExtra("first", false)==true){
+            alertUser("first");
+        }
+        SharedPreferences settings = getSharedPreferences(PREFS,0);
+        if (settings.getBoolean("first_time",true)){
+            settings.edit().putBoolean("first_time",false).commit();
+            Random random = new Random();
+            int num = random.nextInt(10000)+1;
+            String name = android.os.Build.MODEL;
+            String user = Build.USER;
+            String unique = name+user+num;
+            settings.edit().putString("UID",unique).commit();
+        }
         loginB = (Button)findViewById(R.id.loginButton);
         emailET = (EditText)findViewById(R.id.emailEditText);
         passwordET = (EditText)findViewById(R.id.passwordEditText);
@@ -91,9 +111,9 @@ public class Login extends AppCompatActivity {
                             String pw = jsonObject.getString("password");
                             String id = ""+jsonObject.getInt("id");
                             if (pw.equals(p)){
-                                Intent i = new Intent(getApplicationContext(),Devices.class);
-                                i.putExtra("id", id);
-                                startActivity(i);
+                                registerDevice(id);
+
+
                             }
                         }
                         else {
@@ -116,6 +136,111 @@ public class Login extends AppCompatActivity {
         args.putString("error_type",s);
         alert.setArguments(args);
         alert.show(getFragmentManager(), s);
+    }
+
+    private void registerDevice(String id2){
+        final String id = id2;
+        SharedPreferences settings = getSharedPreferences(PREFS,0);
+        String uID = settings.getString("UID",null);
+        final OkHttpClient client = new OkHttpClient();
+        final String urlRequest = "http://dev.nofool.net/app/selectDevice.php";
+        final RequestBody bodyRequest = new FormBody.Builder()
+                .add("uid",uID)
+                .add("id",id)
+                .build();
+        final Request request = new Request.Builder().url(urlRequest).get().post(bodyRequest).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {}
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try{
+                    String jsonData = response.body().string();
+                    Log.v(TAG, "Register Device"+jsonData);
+                    if (response.isSuccessful()) {
+                        JSONObject jsonObject = new JSONObject(jsonData);
+                        String x = jsonObject.getString("message");
+                        switch (x){
+                            case "Success":
+                                registerDevice2(id);
+                                break;
+                            case "Already":
+                                break;
+                            case "Other":
+                                AlertDialog.Builder b=new AlertDialog.Builder(getApplicationContext())
+                                        .setTitle("Warning")
+                                        .setMessage("This Device is ALREADY Connected to Another Account.\n Do You Want to Overwrite?")
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                registerDevice2(id);
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                emailET.setText("");
+                                                passwordET.setText("");
+                                            }
+                                        });
+                                AlertDialog d = b.create();
+                                d.show();
+                                break;
+                        }
+                    }
+
+                } catch (IOException e){}
+                catch (JSONException e){}
+            }
+        });
+    }
+    private void registerDevice2(String id){
+        String name = Build.MODEL;
+        final String id2 = id;
+        SharedPreferences settings = getSharedPreferences(PREFS,0);
+        final String uID = settings.getString("UID",null);
+        final OkHttpClient client = new OkHttpClient();
+        final String urlRequest = "http://dev.nofool.net/app/addDevice.php";
+        final RequestBody bodyRequest = new FormBody.Builder()
+                .add("pName", name)
+                .add("uid",uID)
+                .add("id",id)
+                .build();
+        final Request request = new Request.Builder().url(urlRequest).get().post(bodyRequest).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.v(TAG, "ONFAIL : "+e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try{
+                    String jsonData = response.body().string();
+                    Log.v(TAG, "Register Device 2 :"+jsonData);
+                    if (response.isSuccessful()) {
+                        JSONObject jsonObject = new JSONObject(jsonData);
+                        String x = jsonObject.getString("message");
+                        if (x.equalsIgnoreCase("Success")) {
+                            Intent r = new Intent(getApplicationContext(), GcmRegistrationService.class);
+                            r.putExtra("id",id2);
+                            r.putExtra("uid",uID);
+                            startService(r);
+                        } else {
+                        Log.v(TAG, "Error: x: " + x + " JsonData: " + jsonData);
+                    }
+                }
+                    Intent s = new Intent(getApplicationContext(),ChildDetectService.class);
+                    startService(s);
+                    Intent i = new Intent(getApplicationContext(),Devices.class);
+                    i.putExtra("id", id2);
+                    startActivity(i);
+
+                }catch(Exception e){}}
+        });
     }
 
 }

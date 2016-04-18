@@ -152,6 +152,7 @@ public class Registration extends AppCompatActivity {
                         String success = jsonO.getString("message");
                         if (success.equalsIgnoreCase("success")) {
                             Intent i = new Intent(getApplicationContext(), Login.class);
+                            i.putExtra("first",true);
                             startActivity(i);
                         }
                     }

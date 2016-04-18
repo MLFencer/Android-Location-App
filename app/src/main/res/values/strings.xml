@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TBD</string>
+    <string name="app_name">Find My Android</string>
     <string name="loginText">Login</string>
     <string name="emailHint">Email</string>
     <string name="passwordHint">Password</string>
@@ -14,4 +14,5 @@
     <string name="title_activity_device_list">DeviceList</string>
     <string name="title_activity_devices">Devices</string>
     <string name="refreshbutton">refreshbutton</string>
+   <string name="gcm_defaultSenderID">195528134000</string>
 </resources>
