@@ -239,7 +239,9 @@ public class Login extends AppCompatActivity {
                     i.putExtra("id", id2);
                     startActivity(i);
 
-                }catch(Exception e){}}
+                }catch(Exception e){
+                    Log.v(TAG, "Some Exception at register 2"+e);
+                }}
         });
     }
 
