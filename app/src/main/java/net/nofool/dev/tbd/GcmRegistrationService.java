@@ -47,7 +47,7 @@ public class GcmRegistrationService extends IntentService{
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
     private void sendRegistrationToServer(String token,String uID,String id){
-        String url = "dev.nofool.net/app/updateGCM.php";
+        String url = "http://dev.nofool.net/app/updateGCM.php";
         final OkHttpClient client = new OkHttpClient();
         final RequestBody requestBody = new FormBody.Builder()
                 .add("uid",uID)
@@ -71,10 +71,12 @@ public class GcmRegistrationService extends IntentService{
                         if (x.equalsIgnoreCase("Success")) {
 
                         } else {
-                            Log.v(TAG, "Error: x: " + x + " JsonData: " + jsonData);
+
                         }
                     }
-                    }catch(Exception e){}
+                    }catch(Exception e){
+                    Log.v(TAG, "Exception: " + e);
+                }
             }
         });
 

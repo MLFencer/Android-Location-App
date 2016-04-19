@@ -139,14 +139,14 @@ public class Login extends AppCompatActivity {
     }
 
     private void registerDevice(String id2){
-        final String id = id2;
+        final String id4 = id2;
         SharedPreferences settings = getSharedPreferences(PREFS,0);
-        String uID = settings.getString("UID",null);
+        final String uID = settings.getString("UID",null);
         final OkHttpClient client = new OkHttpClient();
         final String urlRequest = "http://dev.nofool.net/app/selectDevice.php";
         final RequestBody bodyRequest = new FormBody.Builder()
                 .add("uid",uID)
-                .add("id",id)
+                .add("id",id4)
                 .build();
         final Request request = new Request.Builder().url(urlRequest).get().post(bodyRequest).build();
         Call call = client.newCall(request);
@@ -159,12 +159,13 @@ public class Login extends AppCompatActivity {
                 try{
                     String jsonData = response.body().string();
                     Log.v(TAG, "Register Device"+jsonData);
+                    Log.v(TAG, "Request UID: "+uID);
                     if (response.isSuccessful()) {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         String x = jsonObject.getString("message");
                         switch (x){
                             case "Success":
-                                registerDevice2(id);
+                                registerDevice2(id4);
                                 break;
                             case "Already":
                                 break;
@@ -175,7 +176,7 @@ public class Login extends AppCompatActivity {
                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                registerDevice2(id);
+                                                registerDevice2(id4);
                                             }
                                         })
                                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
