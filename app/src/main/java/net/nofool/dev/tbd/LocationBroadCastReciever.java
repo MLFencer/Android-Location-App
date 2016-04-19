@@ -15,8 +15,10 @@ public class LocationBroadCastReciever extends BroadcastReceiver {
         double lat=intent.getDoubleExtra("Latitude",0.0);
 
         SharedPreferences s = context.getSharedPreferences(PREFS,0);
-        s.edit().putString("thisLon",lon+"").commit();
-        s.edit().putString("thisLat",lat+"").commit();
+        s.edit().putString("thisLon",lon+"");
+        s.edit().putString("thisLat",lat+"");
+
+        
 
     }
 

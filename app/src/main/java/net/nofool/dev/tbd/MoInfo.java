@@ -41,8 +41,8 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap){
         mmap = googleMap;
-        x=34.526147;
-        y=-83.984395;
+        //x=34.526147;
+        //y=-83.984395;
         LatLng location = new LatLng(x,y);
         mmap.addMarker(new MarkerOptions().position(location).title(n));
         mmap.moveCamera(CameraUpdateFactory.newLatLng(location));
