@@ -25,6 +25,7 @@ import okhttp3.Response;
 
 public class GcmRegistrationService extends IntentService{
     private static final String TAG = "RegService";
+    final String PREFS="dev.nofool.net.tbd";
     public GcmRegistrationService(){
         super(TAG);
     }
@@ -47,6 +48,8 @@ public class GcmRegistrationService extends IntentService{
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
     private void sendRegistrationToServer(String token,String uID,String id){
+        SharedPreferences s = getSharedPreferences(PREFS,0);
+        s.edit().putString("thisGCM",token).commit();
         String url = "http://dev.nofool.net/app/updateGCM.php";
         final OkHttpClient client = new OkHttpClient();
         final RequestBody requestBody = new FormBody.Builder()

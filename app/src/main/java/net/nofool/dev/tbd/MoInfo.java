@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap mmap;
-    private TextView dName, app1, app2, app3;
+    private TextView dName;
     private ImageButton refresh;
     private double x,y;
     private String n, goog;
@@ -26,13 +26,12 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         setContentView(R.layout.activity_mo_info);
 
         dName = (TextView)findViewById(R.id.deviceNameTV);
-        app1 = (TextView)findViewById(R.id.app1TV);
-        app2 = (TextView)findViewById(R.id.app2TV);
-        app3 = (TextView)findViewById(R.id.app3TV);
         refresh = (ImageButton)findViewById(R.id.imageButton);
 
         goog = getIntent().getStringExtra("google");
         n = getIntent().getStringExtra("name");
+        y = getIntent().getDoubleExtra("lon",0.0);
+        x = getIntent().getDoubleExtra("lat",0.0);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

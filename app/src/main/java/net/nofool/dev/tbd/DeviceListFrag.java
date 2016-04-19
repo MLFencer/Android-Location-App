@@ -38,6 +38,9 @@ public class DeviceListFrag extends ListFragment{
         super.onActivityCreated(savedInstanceState);
 
         getDevices(Devices.getId());
+        for (Device w : deviceArrayList){
+            getLocation(w.getID());
+        }
 
     }
 
@@ -50,22 +53,23 @@ public class DeviceListFrag extends ListFragment{
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {}
+            public void onFailure(Call call, IOException e) {
+            }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try{
+                try {
                     String jsonData = response.body().string();
                     Log.v(TAG, jsonData);
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         JSONArray dArray = jsonObject.getJSONArray("devices");
                         ArrayList<Device> deviceList = new ArrayList<Device>();
-                        for (int i = 0; i<dArray.length(); i++){
+                        for (int i = 0; i < dArray.length(); i++) {
                             JSONObject d = dArray.getJSONObject(i);
                             String name = d.getString("name");
                             String key = d.getString("key");
-                            Log.v(TAG, i+" "+name+" "+key);
+                            Log.v(TAG, i + " " + name + " " + key);
                             deviceList.add(new Device(name, key));
                         }
                         SetFrag(deviceList);
@@ -87,7 +91,7 @@ public class DeviceListFrag extends ListFragment{
             names[i]=d.getName();
         }
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, names);
-        getActivity().runOnUiThread(new Runnable(){
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 setListAdapter(adapter);
@@ -103,18 +107,14 @@ public class DeviceListFrag extends ListFragment{
         Intent i = new Intent(getActivity(),MoInfo.class);
         i.putExtra("name",device.getName());
         i.putExtra("google",device.getGcmID());
+        i.putExtra("lon",device.getLon());
+        i.putExtra("lat",device.getLat());
         startActivity(i);
     }
 
     public void getLocation(String id){
-        String perp=null;
-        for (Device temp : deviceArrayList){
-            String x = temp.getID();
-            if (thisDevice(x)){
-                perp=temp.getGcmID();
-                break;
-            }
-        }
+        SharedPreferences s = getActivity().getSharedPreferences(PREFS, 0);
+        String perp=s.getString("thisGCM",null);
         String url = "http://dev.nofool.net/app/gcm.php";
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -126,30 +126,36 @@ public class DeviceListFrag extends ListFragment{
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {}
+            public void onFailure(Call call, IOException e) {
+            }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                try{
+                try {
                     final String jsonData = response.body().string();
-                    Log.v(TAG, "getLoc"+jsonData);
-                    if (response.isSuccessful()){
+                    Log.v(TAG, "getLoc" + jsonData);
+                    if (response.isSuccessful()) {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         String o = jsonObject.getString("message");
-                        if (o.equalsIgnoreCase("TRUE")){}
+                        if (o.equalsIgnoreCase("TRUE")) {
+                        }
                     }
 
-                } catch (Exception e){
-            }
+                } catch (Exception e) {
+                }
             }
         });
     }
 
-    private boolean thisDevice(String r){
-        SharedPreferences settings = context.getSharedPreferences(PREFS,0);
-        String y =settings.getString("UID",null);
-        if(y.equalsIgnoreCase(r)){
-            return true;
+    public void changeItem(String tooLong, String message){
+        for (Device m : deviceArrayList){
+                if (tooLong.equalsIgnoreCase(m.getGcmID())){
+                    int x = message.indexOf('_');
+                    String longitude = message.substring(0, x - 1);
+                    String latitude = message.substring(x+1,message.length()-1);
+                    m.setLat(Double.parseDouble(latitude));
+                    m.setLon(Double.parseDouble(longitude));
+            }
         }
-        return false;
     }
 }
