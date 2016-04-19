@@ -135,10 +135,11 @@ public class DeviceListFrag extends ListFragment{
                     if (response.isSuccessful()){
                         JSONObject jsonObject = new JSONObject(jsonData);
                         String o = jsonObject.getString("message");
-                        if (o.equalsIgnoreCase("Complete"))
+                        if (o.equalsIgnoreCase("TRUE")){}
                     }
 
-                }
+                } catch (Exception e){
+            }
             }
         });
     }
