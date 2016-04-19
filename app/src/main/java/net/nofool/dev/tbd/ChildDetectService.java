@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,6 +23,7 @@ public class ChildDetectService extends Service {
     MyLocationListener listener;
     private String TAG = ChildDetectService.class.getSimpleName();
     private static final String BROADCAST_ACTION = "string";
+    final String PREFS="dev.nofool.net.tbd";
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {return null;}
@@ -53,10 +55,9 @@ public class ChildDetectService extends Service {
             if (isBetterLocation(loc,previousBestLoc)){
                 loc.getLatitude();
                 loc.getLongitude();
-                intent.putExtra("Latitude",loc.getLatitude());
-                intent.putExtra("Longitude",loc.getLongitude());
-                intent.putExtra("Provider",loc.getProvider());
-                sendBroadcast(intent);
+                SharedPreferences s = getSharedPreferences(PREFS,0);
+                s.edit().putString("thisLon",loc.getLongitude()+"").commit();
+                s.edit().putString("thisLat",loc.getLatitude()+"").commit();
             }
         }
 

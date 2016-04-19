@@ -39,6 +39,7 @@ public class DeviceListFrag extends ListFragment{
 
         getDevices(Devices.getId());
         for (Device w : deviceArrayList){
+            Log.v(TAG, "getLocation called for:"+w.getID());
             getLocation(w.getID());
         }
 
@@ -107,8 +108,6 @@ public class DeviceListFrag extends ListFragment{
         Intent i = new Intent(getActivity(),MoInfo.class);
         i.putExtra("name",device.getName());
         i.putExtra("google",device.getGcmID());
-        i.putExtra("lon",device.getLon());
-        i.putExtra("lat",device.getLat());
         startActivity(i);
     }
 
@@ -145,17 +144,5 @@ public class DeviceListFrag extends ListFragment{
                 }
             }
         });
-    }
-
-    public void changeItem(String tooLong, String message){
-        for (Device m : deviceArrayList){
-                if (tooLong.equalsIgnoreCase(m.getGcmID())){
-                    int x = message.indexOf('_');
-                    String longitude = message.substring(0, x - 1);
-                    String latitude = message.substring(x+1,message.length()-1);
-                    m.setLat(Double.parseDouble(latitude));
-                    m.setLon(Double.parseDouble(longitude));
-            }
-        }
     }
 }

@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
     private EditText passwordET;
     private Button newB;
 
-    private String TAG = Registration.class.getSimpleName();
+    private String TAG = Login.class.getSimpleName();
     final String PREFS="dev.nofool.net.tbd";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +168,11 @@ public class Login extends AppCompatActivity {
                                 registerDevice2(id4);
                                 break;
                             case "Already":
+                                Intent s = new Intent(getApplicationContext(),ChildDetectService.class);
+                                startService(s);
+                                Intent i = new Intent(getApplicationContext(),Devices.class);
+                                i.putExtra("id", id4);
+                                startActivity(i);
                                 break;
                             case "Other":
                                 AlertDialog.Builder b=new AlertDialog.Builder(getApplicationContext())
