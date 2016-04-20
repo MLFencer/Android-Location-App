@@ -17,4 +17,8 @@
    <string name="gcm_defaultSenderID">195528134000</string>
     <string name="submitButton">Submit</string>
     <string name="welcome">Loading...</string>
+    <string name="between_login_devicelist">ca-app-pub-7659357262469619/2566761284</string>
+    <string name="between_devicelist_moinfo">ca-app-pub-7659357262469619/8334093285</string>
+    <string name="top_moinfo">ca-app-pub-7659357262469619/9810826484</string>
+
 </resources>

@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,16 +38,57 @@ public class DeviceListFrag extends ListFragment{
     final String PREFS="dev.nofool.net.tbd";
     private String TAG = DeviceListFrag.class.getSimpleName();
     ArrayList<Device> deviceArrayList = new ArrayList<Device>();
+    InterstitialAd mInterstitialAd;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId(getString(R.string.between_login_devicelist));
+        requestNewInterstitial();
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params){
+                while (mInterstitialAd.isLoading()){
+                    try {
+                        wait(1);
+                    } catch (Exception e){}
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mInterstitialAd.isLoaded()){
+                                mInterstitialAd.show();
+                            }
+                        }
+                    });
+                }
+                return null;
+            }
+
+        }.execute();
+
+
+
+
         getDevices(Devices.getId());
+
+/*
         for (Device w : deviceArrayList){
             Log.v(TAG, "getLocation called for:"+w.getID());
             getLocation(w.getID());
-        }
+        }*/
 
+    }
+
+
+    private void requestNewInterstitial(){
+        Bundle extras = new Bundle();
+        extras.putBoolean("is_designed_for_families", true);
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .addTestDevice("D7BD0063D715185D4D51E12685DA4610")
+                .build();
+        mInterstitialAd.loadAd(adRequest);
     }
 
     private void getDevices(int id){
