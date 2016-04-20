@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,37 +44,42 @@ public class Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        signupButton = (Button)findViewById(R.id.registerButton);
-        emailField = (EditText)findViewById(R.id.emailEditText);
-        passwordField = (EditText)findViewById(R.id.passwordEditText);
-        passwordCheckField = (EditText)findViewById(R.id.passwordCheckEditText);
+        signupButton = (Button) findViewById(R.id.registerButton);
+        emailField = (EditText) findViewById(R.id.emailEditText);
+        passwordField = (EditText) findViewById(R.id.passwordFieldEditText);
+        passwordCheckField = (EditText) findViewById(R.id.passwordCheckEditText);
 
         pass = passwordField.getText().toString();
         passCheck = passwordCheckField.getText().toString();
 
         signupButton.setClickable(false);
 
-        passwordCheckField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (passCheck(pass, passCheck)){
-                    passwordCheckField.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorGood));
-                    signupButton.setClickable(true);
-                }else {
-                    passwordCheckField.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWrong));
-                    signupButton.setClickable(false);
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
+        passwordCheckField.addTextChangedListener(input);
 
 
-        });
+
+
+
         signupButton.setOnClickListener(signupClick);
     }
+
+    private TextWatcher input = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (passCheck(passwordField.getText().toString(), passwordCheckField.getText().toString()) == true) {
+                passwordCheckField.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorGood));
+                signupButton.setClickable(true);
+            } else {
+                passwordCheckField.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWrong));
+                signupButton.setClickable(false);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+    };
 
     private View.OnClickListener signupClick = new View.OnClickListener(){
         private String e;
@@ -81,18 +88,30 @@ public class Registration extends AppCompatActivity {
         public void onClick(View v) {
             e = emailField.getText().toString();
             p = passwordField.getText().toString();
-            Register(e, p);
-            emailField.setText("");
-            passwordCheckField.setText("");
-            passwordField.setText("");
+            if (Patterns.EMAIL_ADDRESS.matcher(e).matches()){
+                Register(e, p);
+                emailField.setText("");
+                passwordCheckField.setText("");
+                passwordField.setText("");
+            } else {
+                emailField.setText("");
+                emailField.setHint("Invalid Email");
+                passwordField.setText("");
+                passwordCheckField.setText("");
+            }
+
         }
     };
     private boolean passCheck(String p1, String p2){
-        if (p1.equalsIgnoreCase(p2)){
-            return true;
-        }else{
-            return false;
+        if (p1!= null && p2 != null){
+            if (p1.equals(p2))
+            {
+                Log.v(TAG,p1+" : "+p2);
+                return true;
+            }
         }
+        Log.v(TAG,"Returned False");
+        return false;
     }
     private void Register(String email, String password) {
         final String e = email;

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -175,24 +176,30 @@ public class Login extends AppCompatActivity {
                                 startActivity(i);
                                 break;
                             case "Other":
-                                AlertDialog.Builder b=new AlertDialog.Builder(getApplicationContext())
-                                        .setTitle("Warning")
-                                        .setMessage("This Device is ALREADY Connected to Another Account.\n Do You Want to Overwrite?")
-                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                registerDevice2(id4);
-                                            }
-                                        })
-                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                emailET.setText("");
-                                                passwordET.setText("");
-                                            }
-                                        });
-                                AlertDialog d = b.create();
-                                d.show();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder b=new AlertDialog.Builder(Login.this)
+                                                .setTitle("Warning")
+                                                .setMessage("This Device is ALREADY Connected to Another Account.\n Do You Want to Overwrite?")
+                                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        changeDevice(id4);
+                                                    }
+                                                })
+                                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        emailET.setText("");
+                                                        passwordET.setText("");
+                                                    }
+                                                });
+                                        AlertDialog d = b.create();
+                                        d.show();
+
+                                    }
+                                });
                                 break;
                         }
                     }
@@ -251,4 +258,52 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void changeDevice(String id){
+        String name = Build.MODEL;
+        final String id2 = id;
+        SharedPreferences settings = getSharedPreferences(PREFS,0);
+        final String uID = settings.getString("UID",null);
+        final OkHttpClient client = new OkHttpClient();
+        final String urlRequest = "http://dev.nofool.net/app/changeDevice.php";
+        final RequestBody bodyRequest = new FormBody.Builder()
+                .add("pName", name)
+                .add("uid",uID)
+                .add("id",id)
+                .build();
+        final Request request = new Request.Builder().url(urlRequest).get().post(bodyRequest).build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.v(TAG, "ONFAIL : "+e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try{
+                    String jsonData = response.body().string();
+                    Log.v(TAG, "Register Device 2 :"+jsonData);
+                    if (response.isSuccessful()) {
+                        JSONObject jsonObject = new JSONObject(jsonData);
+                        String x = jsonObject.getString("message");
+                        if (x.equalsIgnoreCase("Success")) {
+                            Intent r = new Intent(getApplicationContext(), GcmRegistrationService.class);
+                            r.putExtra("id",id2);
+                            r.putExtra("uid",uID);
+                            startService(r);
+                        } else {
+                            Log.v(TAG, "Error: x: " + x + " JsonData: " + jsonData);
+                        }
+                    }
+                    Intent s = new Intent(getApplicationContext(),ChildDetectService.class);
+                    startService(s);
+                    Intent i = new Intent(getApplicationContext(),Devices.class);
+                    i.putExtra("id", id2);
+                    startActivity(i);
+
+                }catch(Exception e){
+                    Log.v(TAG, "Some Exception at register 2"+e);
+                }}
+        });
+    }
 }

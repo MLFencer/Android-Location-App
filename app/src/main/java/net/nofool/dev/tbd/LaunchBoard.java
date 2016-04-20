@@ -12,6 +12,7 @@ public class LaunchBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_board);
 
+
         Intent i = new Intent(LaunchBoard.this,Login.class);
         startActivity(i);
     }
