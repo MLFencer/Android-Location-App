@@ -72,11 +72,11 @@ public class DeviceListFrag extends ListFragment{
 
         getDevices(Devices.getId());
 
-/*
+
         for (Device w : deviceArrayList){
             Log.v(TAG, "getLocation called for:"+w.getID());
             getLocation(w.getID());
-        }*/
+        }
 
     }
 

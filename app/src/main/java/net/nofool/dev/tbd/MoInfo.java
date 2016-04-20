@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +37,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
+
+    InterstitialAd mInterstitialAd;
 
     private Button submit;
     private EditText msgET;
@@ -57,6 +62,30 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         submit = (Button)findViewById(R.id.submitButton);
         registerReceiver(infoReciever, new IntentFilter(MyGcmListenerService.LOCATION_BROADCAST));
 
+        mInterstitialAd = new InterstitialAd(getApplicationContext());
+        mInterstitialAd.setAdUnitId(getString(R.string.between_login_devicelist));
+        requestNewInterstitial();
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params){
+                while (mInterstitialAd.isLoading()){
+                    try {
+                        wait(1);
+                    } catch (Exception e){}
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mInterstitialAd.isLoaded()){
+                                mInterstitialAd.show();
+                            }
+                        }
+                    });
+                }
+                return null;
+            }
+
+        }.execute();
+
         goog = getIntent().getStringExtra("google");
         n = getIntent().getStringExtra("name");
         getLocation(goog);
@@ -73,6 +102,16 @@ public class MoInfo extends FragmentActivity implements OnMapReadyCallback{
         submit.setOnClickListener(submitClick);
         refresh.setOnClickListener(refreshClick);
 
+    }
+
+    private void requestNewInterstitial(){
+        Bundle extras = new Bundle();
+        extras.putBoolean("is_designed_for_families", true);
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .addTestDevice("D7BD0063D715185D4D51E12685DA4610")
+                .build();
+        mInterstitialAd.loadAd(adRequest);
     }
 
     private View.OnClickListener submitClick = new View.OnClickListener() {
